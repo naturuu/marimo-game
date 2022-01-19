@@ -11,7 +11,6 @@ SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) #화면 크기 설정
 clock = pygame.time.Clock() 
 
-pygame.display.set_caption("Marimo game")
 #색상 지정
 BLACK = (0,0,0)
 RED = (255, 0, 0)
@@ -36,7 +35,7 @@ bg = 0
 def addtemp():
     global temp
     temp += 1
-#시간이 지날수록 배경이 바뀌게 바뀜
+#시간이 지날수록 물을 안갈아줘서 배경이 어두워지는 걸로 바뀌게 함
 def change():
     global bg
     bg +=1
@@ -53,7 +52,7 @@ background_image = pygame.image.load('background1.jpg')
 
 food_image = pygame.image.load('food.png')
 foods = []
-for i in range(5):
+for i in range(5): #위에서 음식(양분)이 5개씩 떨어짐
     food = food_image.get_rect(left=random.randint(0, SCREEN_WIDTH - food_image.get_width()), top=-100)
     foods.append(food)
 
@@ -75,7 +74,7 @@ while True: #게임 루프
 
     
 
-    #변수 업데이트
+    #변수 업데이트, 온도가 높아지고 물을 안갈아줘서 배경이 어두워지면 속도가 느려지고 점수도 줄어들게 함
     if bg == 1 or temp >= 30:
         speed = 3
         addscore = 5
@@ -127,7 +126,7 @@ while True: #게임 루프
     
 
     for food in foods:
-        if marimo1.colliderect(food): #충돌이 발생했을때
+        if marimo1.colliderect(food): #음식과 마리모가 닿았을 때 점수가 증가하도록 함
             foods.remove(food)
             food = food_image.get_rect(left=random.randint(0, SCREEN_WIDTH - food_image.get_width()), top=-100)
             foods.append(food)
@@ -182,6 +181,7 @@ while True: #게임 루프
     score_image = small_font.render('점수 {}'.format(score), True, RED)
     screen.blit(score_image, (10, 10))
 
+    #20도에서 30도 사이에서는 검정색 글씨지만 30도를 넘어가면 주황색 글씨가 나오게 함
     if(temp >= 30):
         temp_image = small_font.render('온도 {}'.format(temp), True, OrangeRed)
     else:
